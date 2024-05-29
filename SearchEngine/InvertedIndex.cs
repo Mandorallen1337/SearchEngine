@@ -23,9 +23,12 @@ namespace SearchEngine
         public void Add(string word, int documentId)
         {
             totalDocuments++;
+            // split the word into terms
             string[] terms = word.ToLower().Split(new char[] { ' ', '.', ',', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             documentLengths[documentId.ToString()] = terms.Length;
+            
             var termFrequencies = new Dictionary<string, int>();
+            // count the frequency of each term
             foreach (var term in terms)
             {
                 if (!termFrequencies.ContainsKey(term))
@@ -35,7 +38,7 @@ namespace SearchEngine
                 termFrequencies[term]++;
 
             }
-
+            // add the term frequencies to the index
             foreach (var entry in termFrequencies)
             {
                 string term = entry.Key;
@@ -63,7 +66,9 @@ namespace SearchEngine
                     {
                         string documentId = documentFrequency.DocId;
                         int frequency = documentFrequency.Frequency;
+                        // calculate the tf-idf score
                         double tf = (double)frequency / documentLengths[documentId];
+                        // calculate the idf score
                         double idf = Math.Log((double)totalDocuments / index[term].Count);
                         double tfIdf = tf * idf;
 
@@ -76,6 +81,7 @@ namespace SearchEngine
                     }
                 }
             }
+            // sort the documents by score
             var sortedDocumtents = documentScores.OrderByDescending(x => x.Value).Select(d => d.Key).ToList();
             return sortedDocumtents;
         }
