@@ -11,12 +11,12 @@ namespace SearchEngine
     {
         public void InitializeIndex(InvertedIndex index)
         {
-            index.Add("the brown fox jumped over the brown dog", 1);
-            index.Add("the lazy brown dog sat in the corner", 2);
-            index.Add("the red fox bit the lazy dog", 3);
-            index.Add("the red fox ran away", 4);
-            index.Add("the lazy cat ran away", 5);
-            index.Add("the lazy bear sat in the sun", 6);
+            index.Add("the brown fox jumped over the brown dog", "1");
+            index.Add("the lazy brown dog sat in the corner", "2");
+            index.Add("the red fox bit the lazy dog", "3");
+            index.Add("the red fox ran away", "4");
+            index.Add("the lazy cat ran away", "5");
+            index.Add("the lazy bear sat in the sun", "6");
         }
         public void Run(InvertedIndex index)
         {

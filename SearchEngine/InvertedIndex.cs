@@ -22,14 +22,14 @@ namespace SearchEngine
             totalDocuments = 0;
         }
 
-        public void Add(string word, int documentId)
+        public void Add(string word, string documentId)
         {
             totalDocuments++;                        
             // split the word into terms
             string[] terms = word.ToLower().Split(new char[] { ' ', '.', ',', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-            documentLengths[documentId.ToString()] = terms.Length;
-            documentTexts[documentId.ToString()] = word;
+            documentLengths[documentId] = terms.Length;
+            documentTexts[documentId] = word;
             
             var termFrequencies = new Dictionary<string, int>();
             // count the frequency of each term
@@ -52,7 +52,7 @@ namespace SearchEngine
                 {
                     index[term] = new List<DocumentFreqency>();
                 }
-                index[term].Add(new DocumentFreqency(documentId.ToString(), frequency));
+                index[term].Add(new DocumentFreqency(documentId, frequency));
             }            
 
         }
@@ -80,17 +80,13 @@ namespace SearchEngine
                         {
                             documentScores[documentId] = 0;                            
                         }
-                        documentScores[documentId] += tfIdf;
-                        
+                        documentScores[documentId] += tfIdf;                        
                     }
                 }
             }
             // sort the documents by score
-            var sortedDocuments = documentScores.OrderByDescending(d => d.Value).Select(d => d.Key).ToList(); // Sort documents by score (descending)
-
-
-            return sortedDocuments;
-            
+            var sortedDocuments = documentScores.OrderByDescending(d => d.Value).Select(d => d.Key).ToList(); // Sort documents by score (descending)            
+            return sortedDocuments;            
         }
 
         public string GetDocumentText(string docId)
