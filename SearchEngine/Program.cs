@@ -11,8 +11,11 @@ namespace SearchEngine
     {
         static void Main(string[] args)
         {
-            Search search = new Search();
-            search.Run();            
+            var index = new InvertedIndex();
+            
+            var searchEngine = new Search();
+            searchEngine.InitializeIndex(index);
+            searchEngine.Run(index);
 
         }
     }
