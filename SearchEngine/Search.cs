@@ -30,8 +30,7 @@ namespace SearchEngine
             {
                 Console.WriteLine("Please enter a word to search.");
                 string search = Console.ReadLine();
-                List<string> searchResults = index.Search(search);
-                Console.WriteLine("Search for '" + search + ":'");
+                List<string> searchResults = index.Search(search);                
                 Console.WriteLine("Search for " + search + " was in index: " + string.Join(", ", index.Search(search)));
                 foreach (var documentId in searchResults)
                 {

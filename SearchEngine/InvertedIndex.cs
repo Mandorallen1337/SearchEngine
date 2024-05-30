@@ -86,7 +86,7 @@ namespace SearchEngine
                 }
             }
             // sort the documents by score
-            var sortedDocumtents = documentScores.OrderByDescending(x => x.Value).Select(d => d.Key).ToList();
+            var sortedDocumtents = documentScores.OrderBy(x => x.Value).Select(d => d.Key).ToList();
             return sortedDocumtents;
             
         }
