@@ -9,23 +9,27 @@ namespace SearchEngine
 {
     public class InvertedIndex
     {
-        private Dictionary<string, List<DocumentFreqency>> index;
-        private Dictionary<string, int> documentLengths;
+        public Dictionary<string, List<DocumentFreqency>> index;
+        public Dictionary<string, int> documentLengths;
+        public Dictionary<string, string> documentTexts;
         public int totalDocuments;
 
         public InvertedIndex()
         {
             index = new Dictionary<string, List<DocumentFreqency>>();
             documentLengths = new Dictionary<string, int>();
+            documentTexts = new Dictionary<string, string>();
             totalDocuments = 0;
         }
 
         public void Add(string word, int documentId)
         {
-            totalDocuments++;
+            totalDocuments++;                        
             // split the word into terms
             string[] terms = word.ToLower().Split(new char[] { ' ', '.', ',', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
             documentLengths[documentId.ToString()] = terms.Length;
+            documentTexts[documentId.ToString()] = word;
             
             var termFrequencies = new Dictionary<string, int>();
             // count the frequency of each term
@@ -84,8 +88,16 @@ namespace SearchEngine
             // sort the documents by score
             var sortedDocumtents = documentScores.OrderByDescending(x => x.Value).Select(d => d.Key).ToList();
             return sortedDocumtents;
-        }
             
+        }
+
+        public string GetDocumentText(string docId)
+        {
+            return documentTexts[docId]; // Retrieve the full text of the document
+        }
+
+
+
     }
        
 }
