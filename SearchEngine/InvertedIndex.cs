@@ -64,25 +64,22 @@ namespace SearchEngine
 
             foreach(var term in queryItems)
             {
-                if (index.ContainsKey(term))
+                if (!index.ContainsKey(term))
+                    continue;
+                var postings = index[term];
+                double idf = Math.Log((double)totalDocuments / postings.Count);
+                foreach (var posting in postings)
                 {
-                    foreach (var documentFrequency in index[term])
+                    double tf = (double)posting.Frequency / documentLengths[posting.DocId];
+                    double tfIdf = tf * idf;
+                    if (!documentScores.ContainsKey(posting.DocId))
                     {
-                        string documentId = documentFrequency.DocId;
-                        int frequency = documentFrequency.Frequency;
-                        // calculate the tf-idf score
-                        double tf = (double)frequency / documentLengths[documentId];
-                        // calculate the idf score
-                        double idf = Math.Log((double)totalDocuments / index[term].Count);
-                        double tfIdf = tf * idf;
-
-                        if (!documentScores.ContainsKey(documentId))
-                        {
-                            documentScores[documentId] = 0;                            
-                        }
-                        documentScores[documentId] += tfIdf;                        
+                        documentScores[posting.DocId] = 0.0;
                     }
-                }
+                    documentScores[posting.DocId] += tfIdf;
+
+                }                                
+                
             }
             // sort the documents by score
             var sortedDocuments = documentScores.OrderByDescending(d => d.Value).Select(d => d.Key).ToList(); // Sort documents by score (descending)            
